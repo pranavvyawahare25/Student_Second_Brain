@@ -1,0 +1,8 @@
+pymupdf
+sentence-transformers
+langchain
+pymongo
+numpy
+fastapi 
+uvicorn 
+python-multipart
