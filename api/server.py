@@ -416,6 +416,262 @@ async def rag_stats():
         return {"status": "not_initialized", "error": str(e)}
 
 
+# ============ Web Discovery Endpoints ============
+@app.get("/discover")
+async def discover_topic(
+    topic: str,
+    web_count: int = 20,
+    news_count: int = 5,
+    image_count: int = 5,
+    video_count: int = 5
+):
+    """
+    Discover content for a topic using Brave Search API.
+    
+    Returns categorized results:
+    - Wikipedia articles
+    - Research papers
+    - Study guides
+    - Documentation
+    - Tutorials
+    - News
+    - Videos
+    - Images
+    - Blogs
+    """
+    if not topic:
+        raise HTTPException(400, "Topic parameter is required")
+    
+    try:
+        from web_extractor.brave_search import BraveSearchClient
+        
+        client = BraveSearchClient()
+        result = client.discover_topic(
+            topic,
+            web_count=web_count,
+            news_count=news_count,
+            image_count=image_count,
+            video_count=video_count
+        )
+        
+        return result.to_dict()
+    except ValueError as e:
+        raise HTTPException(500, str(e))
+    except Exception as e:
+        import traceback
+        print(f"Discovery error: {traceback.format_exc()}")
+        raise HTTPException(500, f"Discovery failed: {str(e)}")
+
+
+@app.get("/discover/wikipedia")
+async def discover_wikipedia(topic: str, count: int = 5):
+    """Search specifically for Wikipedia articles on a topic."""
+    try:
+        from web_extractor.brave_search import BraveSearchClient
+        client = BraveSearchClient()
+        results = client.search_wikipedia(topic, count)
+        return {"query": topic, "results": [r.to_dict() for r in results]}
+    except Exception as e:
+        raise HTTPException(500, f"Wikipedia search failed: {str(e)}")
+
+
+@app.get("/discover/papers")
+async def discover_papers(topic: str, count: int = 10):
+    """Search for research papers on a topic."""
+    try:
+        from web_extractor.brave_search import BraveSearchClient
+        client = BraveSearchClient()
+        results = client.search_research_papers(topic, count)
+        return {"query": topic, "results": [r.to_dict() for r in results]}
+    except Exception as e:
+        raise HTTPException(500, f"Research paper search failed: {str(e)}")
+
+
+@app.get("/discover/guides")
+async def discover_guides(topic: str, count: int = 10):
+    """Search for study guides and tutorials on a topic."""
+    try:
+        from web_extractor.brave_search import BraveSearchClient
+        client = BraveSearchClient()
+        results = client.search_study_guides(topic, count)
+        return {"query": topic, "results": [r.to_dict() for r in results]}
+    except Exception as e:
+        raise HTTPException(500, f"Study guide search failed: {str(e)}")
+
+
+@app.get("/discover/images")
+async def discover_images(topic: str, count: int = 10):
+    """
+    Search for topic-related images using Brave Search API.
+    
+    Returns images with thumbnails, source URLs, and dimensions.
+    """
+    try:
+        from web_extractor.brave_search import BraveSearchClient
+        client = BraveSearchClient()
+        results = client.search_images(topic, count)
+        
+        # Format image results
+        images = []
+        for r in results:
+            img = {
+                "title": r.title,
+                "url": r.url,
+                "source": r.source,
+                "thumbnail": r.metadata.get("thumbnail", ""),
+                "properties": r.metadata.get("properties", {})
+            }
+            images.append(img)
+        
+        return {
+            "query": topic,
+            "total": len(images),
+            "images": images
+        }
+    except Exception as e:
+        import traceback
+        print(f"Image search error: {traceback.format_exc()}")
+        raise HTTPException(500, f"Image search failed: {str(e)}")
+
+
+# ============ LLM Research & Summarization Endpoints ============
+@app.get("/research")
+async def research_topic(
+    topic: str,
+    web_count: int = 15,
+    youtube_count: int = 5,
+    image_count: int = 5
+):
+    """
+    Complete topic research with LLM-powered summarization.
+    
+    Fetches content from web, YouTube, and images, then uses Gemini
+    to generate structured insights:
+    - Key concepts
+    - Step-by-step explanation
+    - Practical to-dos
+    - Common mistakes
+    - Learning roadmap
+    """
+    try:
+        from web_extractor.summarizer import TopicResearcher
+        
+        researcher = TopicResearcher()
+        result = researcher.research_topic(
+            topic,
+            web_count=web_count,
+            youtube_count=youtube_count,
+            image_count=image_count
+        )
+        
+        return result
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    except Exception as e:
+        import traceback
+        print(f"Research error: {traceback.format_exc()}")
+        raise HTTPException(500, f"Research failed: {str(e)}")
+
+
+@app.get("/summarize")
+async def summarize_content(topic: str):
+    """
+    Quick summarization of a topic (insights only, no raw data).
+    
+    Returns structured insights for rapid learning.
+    """
+    try:
+        from web_extractor.summarizer import TopicResearcher
+        
+        researcher = TopicResearcher()
+        result = researcher.research_topic(topic, web_count=10, youtube_count=3, image_count=3)
+        
+        # Return only insights for quick consumption
+        return {
+            "topic": topic,
+            "insights": result["insights"]
+        }
+    except Exception as e:
+        import traceback
+        print(f"Summarize error: {traceback.format_exc()}")
+        raise HTTPException(500, f"Summarization failed: {str(e)}")
+
+
+# ============ YouTube Video Endpoints ============
+@app.get("/youtube")
+async def youtube_search(
+    topic: str,
+    max_results: int = 10,
+    order: str = "viewCount",
+    duration: str = "any"
+):
+    """
+    Search YouTube videos for a topic.
+    
+    Args:
+        topic: Topic to search
+        max_results: Number of results (max 50)
+        order: viewCount, relevance, date, rating
+        duration: any, short (<4min), medium (4-20min), long (>20min)
+    """
+    try:
+        from web_extractor.youtube_search import (
+            YouTubeSearchClient, VideoOrder, VideoDuration
+        )
+        
+        client = YouTubeSearchClient()
+        result = client.discover_videos(
+            topic,
+            max_results=max_results,
+            order=VideoOrder(order),
+            duration=VideoDuration(duration)
+        )
+        
+        return result.to_dict()
+    except ValueError as e:
+        raise HTTPException(400, str(e))
+    except Exception as e:
+        import traceback
+        print(f"YouTube search error: {traceback.format_exc()}")
+        raise HTTPException(500, f"YouTube search failed: {str(e)}")
+
+
+@app.get("/youtube/tutorials")
+async def youtube_tutorials(topic: str, max_results: int = 10):
+    """Search for tutorial videos on a topic (medium duration, by views)."""
+    try:
+        from web_extractor.youtube_search import YouTubeSearchClient
+        client = YouTubeSearchClient()
+        result = client.search_tutorials(topic, max_results)
+        return result.to_dict()
+    except Exception as e:
+        raise HTTPException(500, f"Tutorial search failed: {str(e)}")
+
+
+@app.get("/youtube/courses")
+async def youtube_courses(topic: str, max_results: int = 10):
+    """Search for full course videos on a topic (long duration)."""
+    try:
+        from web_extractor.youtube_search import YouTubeSearchClient
+        client = YouTubeSearchClient()
+        result = client.search_courses(topic, max_results)
+        return result.to_dict()
+    except Exception as e:
+        raise HTTPException(500, f"Course search failed: {str(e)}")
+
+
+@app.get("/youtube/shorts")
+async def youtube_shorts(topic: str, max_results: int = 10):
+    """Search for short explainer videos on a topic (<4 min)."""
+    try:
+        from web_extractor.youtube_search import YouTubeSearchClient
+        client = YouTubeSearchClient()
+        result = client.search_shorts(topic, max_results)
+        return result.to_dict()
+    except Exception as e:
+        raise HTTPException(500, f"Shorts search failed: {str(e)}")
+
+
 # ============ Main ============
 def main():
     """Run server with ngrok tunnel."""
