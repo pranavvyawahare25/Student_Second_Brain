@@ -26,7 +26,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     text = extract_text_from_pdf(file_path)
     chunks = split_text(text)
     embeddings = embedder.embed(chunks)
-    store.store(chunks, embeddings)
+    store.store(chunks, embeddings, source_file=file.filename)
 
     # Optional: delete after processing
     os.remove(file_path)

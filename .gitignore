@@ -8,3 +8,13 @@ __pycache__/
 output_audio/
 *.index
 *.pkl
+
+# Output directories & files
+output_api/
+output_artifacts/
+pdf_to_text/text_chunks.json
+rag_index/
+unified_knowledge.json
+uploads/
+test.pdf
+*.faiss
