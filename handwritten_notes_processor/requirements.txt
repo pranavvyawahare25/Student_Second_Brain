@@ -1,0 +1,8 @@
+azure-ai-formrecognizer
+azure-core
+numpy
+opencv-python
+matplotlib
+networkx
+scikit-learn
+scipy

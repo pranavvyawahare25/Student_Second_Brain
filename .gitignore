@@ -1,0 +1,4 @@
+.venv/
+output_artifacts/
+__pycache__/
+.DS_Store
