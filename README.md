@@ -21,6 +21,8 @@ This system has **built-in support for Indian languages**, making it uniquely su
 
 **See [PIPELINE_DOCUMENTATION.md](PIPELINE_DOCUMENTATION.md) for complete architecture details and Indian language features.**
 
+**Quick Start? See [QUICK_REFERENCE.md](QUICK_REFERENCE.md) for a condensed guide with all models and API endpoints.**
+
 ## 🌟 Key Features
 
 ### 1. **Handwritten Notes Processor** ✍️
@@ -320,6 +322,13 @@ Student_Second_Brain/
 - Sarvam AI (Indian language processing)
 - Groq (LLM inference)
 - Azure Cognitive Services (optional)
+
+## 📖 Documentation Index
+
+1. **[README.md](README.md)** (This file) - Installation, setup, and basic usage
+2. **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Quick start guide with all models and API endpoints
+3. **[PIPELINE_DOCUMENTATION.md](PIPELINE_DOCUMENTATION.md)** - Complete technical architecture and Indian language features
+4. **[ARCHITECTURE_GUIDE.md](ARCHITECTURE_GUIDE.md)** - Design philosophy and detailed walkthrough
 
 ## 🤝 Contributing
 Contributions are welcome! Please open an issue or submit a pull request.
