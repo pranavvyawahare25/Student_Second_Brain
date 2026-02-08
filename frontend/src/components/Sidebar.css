@@ -81,6 +81,36 @@
     border-radius: 50%;
 }
 
+.syllabus-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.95rem;
+    flex-shrink: 0;
+}
+
+.syllabus-nav-btn:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+    border-color: rgba(102, 126, 234, 0.4);
+}
+
+.syllabus-icon {
+    font-size: 1.1rem;
+}
+
+body[data-theme="light"] .syllabus-nav-btn {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+}
+
 .sidebar-header {
     display: flex;
     justify-content: space-between;

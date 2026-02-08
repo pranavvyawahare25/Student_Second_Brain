@@ -1,0 +1,320 @@
+.syllabus-page {
+    padding: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.syllabus-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.syllabus-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.syllabus-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+}
+
+.syllabus-input-section {
+    background: rgba(30, 30, 45, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.course-name-input {
+    margin-bottom: 1.5rem;
+}
+
+.course-name-input label {
+    display: block;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.course-name-input input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+}
+
+.course-name-input input:focus {
+    outline: none;
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+.input-methods {
+    display: flex;
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.text-input-card,
+.file-input-card {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+}
+
+.text-input-card h4,
+.file-input-card h4 {
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.text-input-card textarea {
+    width: 100%;
+    min-height: 200px;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: white;
+    font-size: 0.9rem;
+    font-family: 'Inter', monospace;
+    resize: vertical;
+    margin-bottom: 1rem;
+}
+
+.text-input-card textarea:focus {
+    outline: none;
+    border-color: rgba(102, 126, 234, 0.5);
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+}
+
+.file-dropzone {
+    border: 2px dashed rgba(102, 126, 234, 0.3);
+    border-radius: 12px;
+    padding: 3rem 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.file-dropzone:hover {
+    border-color: rgba(102, 126, 234, 0.6);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.file-dropzone input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-dropzone label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+}
+
+.upload-icon {
+    font-size: 2.5rem;
+}
+
+.file-types {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.error-message {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: 8px;
+    color: #fca5a5;
+    font-size: 0.9rem;
+}
+
+.parsed-preview {
+    margin-top: 2rem;
+    background: rgba(30, 30, 45, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+}
+
+.parsed-preview h3 {
+    color: #22c55e;
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.units-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.unit-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1.25rem;
+    transition: all 0.3s ease;
+}
+
+.unit-card:hover {
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-2px);
+}
+
+.unit-header {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.unit-number {
+    display: inline-block;
+    padding: 0.25rem 0.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.unit-header h4 {
+    color: white;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.topics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.topics-list li {
+    padding: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.85rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.topics-list li:last-child {
+    border-bottom: none;
+}
+
+.topics-list li::before {
+    content: '•';
+    color: #667eea;
+    margin-right: 0.5rem;
+}
+
+.syllabus-stats {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.syllabus-stats span {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .input-methods {
+        flex-direction: column;
+    }
+
+    .divider {
+        padding: 1rem 0;
+    }
+}
+
+/* Light theme */
+body[data-theme="light"] .syllabus-page {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .syllabus-header h2 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .syllabus-input-section,
+body[data-theme="light"] .parsed-preview {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .course-name-input input,
+body[data-theme="light"] .text-input-card textarea {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.1);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .unit-card {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .unit-header h4 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .topics-list li {
+    color: #475569;
+}

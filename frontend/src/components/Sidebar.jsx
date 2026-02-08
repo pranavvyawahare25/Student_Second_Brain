@@ -18,7 +18,8 @@ function Sidebar({
     onSelectLecture,
     showProfile,
     onToggleProfile,
-    onShowCatalog
+    onShowCatalog,
+    onShowSyllabus
 }) {
     const { isSignedIn, user } = useUser()
     const [showAddCourseForm, setShowAddCourseForm] = useState(false)
@@ -77,13 +78,22 @@ function Sidebar({
         <aside className={`sidebar ${isOpen ? 'open' : ''}`}>
             <button className="mobile-close" onClick={onClose} aria-label="Close Menu">×</button>
             {isSignedIn && (
-                <button
-                    className={`profile-btn ${showProfile ? 'active' : ''}`}
-                    onClick={onToggleProfile}
-                >
-                    <img src={user.imageUrl} alt="" className="mini-avatar" />
-                    <span>My Profile</span>
-                </button>
+                <>
+                    <button
+                        className={`profile-btn ${showProfile ? 'active' : ''}`}
+                        onClick={onToggleProfile}
+                    >
+                        <img src={user.imageUrl} alt="" className="mini-avatar" />
+                        <span>My Profile</span>
+                    </button>
+                    <button
+                        className="syllabus-nav-btn"
+                        onClick={onShowSyllabus}
+                    >
+                        <span className="syllabus-icon">📋</span>
+                        <span>My Syllabus</span>
+                    </button>
+                </>
             )}
 
             {isSignedIn ? (

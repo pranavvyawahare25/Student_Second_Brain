@@ -4,6 +4,7 @@ import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import MainContent from './components/MainContent'
 import CourseCatalog from './components/CourseCatalog'
+import SyllabusPage from './components/SyllabusPage'
 import ThemeToggle from './components/ThemeToggle'
 import './App.css'
 
@@ -16,6 +17,7 @@ function App() {
     const [chatHistory, setChatHistory] = useState([])
     const [showProfile, setShowProfile] = useState(false)
     const [showCatalog, setShowCatalog] = useState(false)
+    const [showSyllabus, setShowSyllabus] = useState(false)
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
 
     // Load courses from local storage when user changes
@@ -51,6 +53,17 @@ function App() {
         setSelectedUnitId(null)
         setSelectedLectureId(null)
         setShowProfile(false)
+        setShowSyllabus(false)
+        setIsSidebarOpen(false)
+    }
+
+    const handleShowSyllabus = () => {
+        setShowSyllabus(true)
+        setSelectedCourseId(null)
+        setSelectedUnitId(null)
+        setSelectedLectureId(null)
+        setShowProfile(false)
+        setShowCatalog(false)
         setIsSidebarOpen(false)
     }
 
@@ -281,10 +294,15 @@ function App() {
                         showProfile={showProfile}
                         onToggleProfile={handleToggleProfile}
                         onShowCatalog={handleShowCatalog}
+                        onShowSyllabus={handleShowSyllabus}
                     />
                 )}
 
-                {isSignedIn && (courses.length === 0 || showCatalog) ? (
+                {isSignedIn && showSyllabus ? (
+                    <main className="main-content">
+                        <SyllabusPage />
+                    </main>
+                ) : isSignedIn && (courses.length === 0 || showCatalog) ? (
                     <main className="main-content">
                         <CourseCatalog onEnroll={handleEnrollCourse} />
                     </main>

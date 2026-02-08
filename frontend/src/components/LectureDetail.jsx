@@ -8,13 +8,66 @@ function LectureDetail({ lecture, onSaveMaterials }) {
     const [isUploading, setIsUploading] = useState(false)
     const [uploadStatus, setUploadStatus] = useState('')
     const [suggestions, setSuggestions] = useState([])
+    const [resources, setResources] = useState([])
     const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false)
 
+    // Summary modal state
+    const [showSummaryModal, setShowSummaryModal] = useState(false)
+    const [summaryData, setSummaryData] = useState(null)
+    const [summaryType, setSummaryType] = useState('')  // 'video' or 'audio'
+    const [isLoadingSummary, setIsLoadingSummary] = useState(false)
+
+    // Only show suggestions after upload - reset when lecture changes
     useEffect(() => {
         if (lecture) {
-            fetchSuggestions()
+            setSuggestions([])
+            setResources([])
+            setSummaryData(null)
+            setShowSummaryModal(false)
         }
     }, [lecture?.id])
+
+    // Handle clicking on Video/Audio card to show summary
+    const handleMediaClick = async (type) => {
+        const mat = lecture?.materials
+        const file = type === 'video' ? mat?.video : mat?.audio
+
+        if (!file) return
+
+        setSummaryType(type)
+        setShowSummaryModal(true)
+        setIsLoadingSummary(true)
+
+        try {
+            // Check if we have cached summary from upload response
+            if (file.summary) {
+                setSummaryData({
+                    summary: file.summary,
+                    key_points: file.key_points || [],
+                    topics: file.topics || [],
+                    transcript: file.transcript || ''
+                })
+            } else {
+                // No cached summary - show message
+                setSummaryData({
+                    summary: `The ${type} file "${file.name}" was uploaded before AI summarization was enabled. Please re-upload to get an AI-generated summary.`,
+                    key_points: [],
+                    topics: [],
+                    transcript: ''
+                })
+            }
+        } catch (error) {
+            console.error('Error loading summary:', error)
+            setSummaryData({
+                summary: 'Error loading summary. Please try again.',
+                key_points: [],
+                topics: [],
+                transcript: ''
+            })
+        } finally {
+            setIsLoadingSummary(false)
+        }
+    }
 
     const fetchSuggestions = async () => {
         if (!lecture) return
@@ -35,6 +88,11 @@ function LectureDetail({ lecture, onSaveMaterials }) {
                     }
                 })
                 setSuggestions(formattedSuggestions)
+
+                // Capture YouTube and tutorial links
+                if (data.insights.further_resources) {
+                    setResources(data.insights.further_resources)
+                }
             }
         } catch (error) {
             console.error('Error fetching suggestions:', error)
@@ -88,11 +146,20 @@ function LectureDetail({ lecture, onSaveMaterials }) {
                 else if (file.type.startsWith('image/')) type = 'image'
 
                 if (type) {
-                    await uploadFile(file, type)
+                    const response = await uploadFile(file, type)
+
+                    // Create material object with summary data from API response
+                    const materialObject = {
+                        name: file.name,
+                        summary: response.summary || null,
+                        key_points: response.key_points || [],
+                        topics: response.topics || [],
+                        transcript: response.full_transcript || response.transcript || ''
+                    }
 
                     // Update local state based on type
-                    if (type === 'video') categorized.video = file
-                    else if (type === 'audio') categorized.audio = file
+                    if (type === 'video') categorized.video = materialObject
+                    else if (type === 'audio') categorized.audio = materialObject
                     else if (type === 'pdf') categorized.pdf = file
                     else if (type === 'image') categorized.images.push(file)
                 }
@@ -132,16 +199,24 @@ function LectureDetail({ lecture, onSaveMaterials }) {
                     <div className="materials-section">
                         <h5>📁 Current Materials</h5>
                         <div className="materials-grid">
-                            <div className="material-card">
+                            <button
+                                className={`material-card ${mat.video ? 'has-content clickable' : ''}`}
+                                onClick={() => mat.video && handleMediaClick('video')}
+                                disabled={!mat.video}
+                            >
                                 <span className="mat-icon">📹</span>
                                 <span className="mat-label">Video</span>
-                                <span className="mat-value">{mat.video ? mat.video.name : 'None'}</span>
-                            </div>
-                            <div className="material-card">
+                                <span className="mat-value">{mat.video ? '📊 View Summary' : 'None'}</span>
+                            </button>
+                            <button
+                                className={`material-card ${mat.audio ? 'has-content clickable' : ''}`}
+                                onClick={() => mat.audio && handleMediaClick('audio')}
+                                disabled={!mat.audio}
+                            >
                                 <span className="mat-icon">🎵</span>
                                 <span className="mat-label">Audio</span>
-                                <span className="mat-value">{mat.audio ? mat.audio.name : 'None'}</span>
-                            </div>
+                                <span className="mat-value">{mat.audio ? '📊 View Summary' : 'None'}</span>
+                            </button>
                             <div className="material-card">
                                 <span className="mat-icon">📄</span>
                                 <span className="mat-label">PDF</span>
@@ -238,9 +313,86 @@ function LectureDetail({ lecture, onSaveMaterials }) {
                                 </div>
                             )}
                         </div>
+
+                        {/* YouTube & Tutorial Links Section */}
+                        {resources.length > 0 && (
+                            <div className="resources-section">
+                                <h5>🔗 Recommended Resources</h5>
+                                <div className="resources-list">
+                                    {resources.map((res, idx) => (
+                                        <a
+                                            key={idx}
+                                            href={res.url}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className={`resource-link ${res.type}`}
+                                        >
+                                            <span className="resource-icon">
+                                                {res.type === 'video' ? '📺' :
+                                                    res.type === 'tutorial' ? '📖' :
+                                                        res.type === 'docs' ? '📄' :
+                                                            res.type === 'paper' ? '🔬' :
+                                                                res.type === 'wiki' ? '🌐' :
+                                                                    res.type === 'article' ? '📰' : '🔗'}
+                                            </span>
+                                            <span className="resource-title">{res.title}</span>
+                                            <span className="resource-arrow">→</span>
+                                        </a>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
+
+            {/* Summary Modal */}
+            {showSummaryModal && (
+                <div className="summary-modal-overlay" onClick={() => setShowSummaryModal(false)}>
+                    <div className="summary-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close" onClick={() => setShowSummaryModal(false)}>×</button>
+                        <h3>{summaryType === 'video' ? '📹' : '🎵'} {summaryType.charAt(0).toUpperCase() + summaryType.slice(1)} Summary</h3>
+
+                        {isLoadingSummary ? (
+                            <div className="summary-loading">
+                                <span className="loading-spinner">⏳</span>
+                                <p>Loading summary...</p>
+                            </div>
+                        ) : summaryData ? (
+                            <div className="summary-content">
+                                <div className="summary-section">
+                                    <h4>📝 Summary</h4>
+                                    <p>{summaryData.summary}</p>
+                                </div>
+
+                                {summaryData.key_points?.length > 0 && (
+                                    <div className="summary-section">
+                                        <h4>🎯 Key Points</h4>
+                                        <ul>
+                                            {summaryData.key_points.map((point, idx) => (
+                                                <li key={idx}>{point}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+
+                                {summaryData.topics?.length > 0 && (
+                                    <div className="summary-section">
+                                        <h4>📚 Topics Covered</h4>
+                                        <div className="topics-tags">
+                                            {summaryData.topics.map((topic, idx) => (
+                                                <span key={idx} className="topic-tag">{topic}</span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <p className="no-summary">No summary available</p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

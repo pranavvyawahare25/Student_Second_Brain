@@ -14,7 +14,7 @@ import os
 import sys
 import shutil
 from pathlib import Path
-from typing import Optional
+from typing import Optional, List
 from fastapi import FastAPI, UploadFile, File, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -58,6 +58,86 @@ def save_upload(file: UploadFile, subdir: str) -> Path:
     with open(dest, "wb") as f:
         shutil.copyfileobj(file.file, f)
     return dest
+
+
+def summarize_transcript(transcript: str) -> dict:
+    """
+    Summarize a transcript using Groq AI.
+    
+    Args:
+        transcript: The full transcript text (English)
+        
+    Returns:
+        Dict with summary, key_points, and topics
+    """
+    try:
+        from groq import Groq
+        
+        api_key = os.getenv("GROQ_API_KEY")
+        if not api_key:
+            return {"error": "GROQ_API_KEY not configured", "summary": None}
+        
+        client = Groq(api_key=api_key)
+        
+        # Truncate if too long (Groq has token limits)
+        max_chars = 15000
+        if len(transcript) > max_chars:
+            transcript = transcript[:max_chars] + "..."
+        
+        prompt = f"""Analyze this lecture/audio transcript and provide:
+
+1. **Summary** (2-3 paragraphs): A clear, comprehensive summary of the main content
+2. **Key Points** (5-7 bullet points): The most important takeaways
+3. **Topics Covered**: List the main topics/subjects discussed
+
+Transcript:
+{transcript}
+
+Respond in JSON format:
+{{
+    "summary": "...",
+    "key_points": ["point 1", "point 2", ...],
+    "topics": ["topic 1", "topic 2", ...]
+}}"""
+
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": "You are an expert at summarizing educational content. Always respond with valid JSON only, no markdown formatting."},
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.3,
+            max_tokens=2000
+        )
+        
+        import json
+        import re
+        result_text = response.choices[0].message.content.strip()
+        
+        # Extract JSON from response (handle markdown code blocks)
+        if "```json" in result_text:
+            result_text = result_text.split("```json")[1].split("```")[0]
+        elif "```" in result_text:
+            result_text = result_text.split("```")[1].split("```")[0]
+        
+        # Clean control characters that break JSON parsing
+        result_text = re.sub(r'[\x00-\x1f\x7f-\x9f]', ' ', result_text)
+        result_text = result_text.strip()
+        
+        # Try to parse JSON
+        try:
+            return json.loads(result_text)
+        except json.JSONDecodeError:
+            # If JSON parsing fails, return the raw text as summary
+            return {
+                "summary": result_text[:2000] if len(result_text) > 100 else "Summary could not be parsed.",
+                "key_points": [],
+                "topics": []
+            }
+        
+    except Exception as e:
+        print(f"Summarization error: {e}")
+        return {"error": str(e), "summary": None}
 
 
 # ============ Endpoints ============
@@ -236,16 +316,30 @@ async def upload_audio(file: UploadFile = File(...)):
                     with open(json_file, "r") as jf:
                         transcript_data = json.load(jf)
                         
-                        # Save to our output path
+                        # Get full transcript text
+                        full_transcript = transcript_data.get("transcript", "")
+                        
+                        # Generate summary using Groq AI
+                        summary_data = summarize_transcript(full_transcript)
+                        
+                        # Save to our output path (with summary)
                         output_path = OUTPUT_DIR / f"{file.filename}_transcript.json"
+                        output_data = {
+                            **transcript_data,
+                            "ai_summary": summary_data
+                        }
                         with open(output_path, "w") as f:
-                            json.dump(transcript_data, f, indent=2)
+                            json.dump(output_data, f, indent=2)
                         
                         return {
                             "status": "success",
                             "filename": file.filename,
-                            "transcript": transcript_data.get("transcript", "")[:500],
+                            "transcript": full_transcript[:500] + ("..." if len(full_transcript) > 500 else ""),
+                            "full_transcript": full_transcript,
                             "language": transcript_data.get("language_code"),
+                            "summary": summary_data.get("summary"),
+                            "key_points": summary_data.get("key_points", []),
+                            "topics": summary_data.get("topics", []),
                             "output": str(output_path)
                         }
                 raise HTTPException(500, "No transcript file found in output")
@@ -670,6 +764,162 @@ async def youtube_shorts(topic: str, max_results: int = 10):
         return result.to_dict()
     except Exception as e:
         raise HTTPException(500, f"Shorts search failed: {str(e)}")
+
+
+# ============ Syllabus Management Endpoints ============
+
+# Global syllabus stores (in production, use per-user stores)
+_syllabus_parser = None
+_syllabus_store = None
+
+def _get_syllabus_parser():
+    global _syllabus_parser
+    if _syllabus_parser is None:
+        from syllabus.parser import SyllabusParser
+        _syllabus_parser = SyllabusParser()
+    return _syllabus_parser
+
+def _get_syllabus_store():
+    global _syllabus_store
+    if _syllabus_store is None:
+        from syllabus.vector_store import SyllabusVectorStore
+        _syllabus_store = SyllabusVectorStore(store_path="syllabus_index")
+    return _syllabus_store
+
+
+@app.post("/syllabus/upload")
+async def upload_syllabus(
+    file: Optional[UploadFile] = File(None),
+    text: Optional[str] = None,
+    course_name: str = "My Course"
+):
+    """
+    Upload and parse syllabus.
+    
+    Accepts either a PDF/text file or raw text.
+    Parses into units/topics and stores embeddings.
+    """
+    try:
+        parser = _get_syllabus_parser()
+        store = _get_syllabus_store()
+        
+        syllabus_text = ""
+        
+        if file:
+            # Save and extract text from file
+            file_path = save_upload(file, "syllabus")
+            
+            if file.filename.endswith(".pdf"):
+                # Extract text from PDF
+                from pdf_to_text.ingestion.pdf_loder import extract_text_from_pdf
+                syllabus_text = extract_text_from_pdf(str(file_path))
+            else:
+                # Read as text file
+                with open(file_path, "r", encoding="utf-8") as f:
+                    syllabus_text = f.read()
+        elif text:
+            syllabus_text = text
+        else:
+            raise HTTPException(400, "Provide either a file or text")
+        
+        # Parse syllabus
+        parsed = parser.parse(syllabus_text, course_name)
+        
+        if not parsed.units:
+            raise HTTPException(400, "Could not detect any units in the syllabus")
+        
+        # Generate embeddings for each topic
+        from pdf_to_text.ingestion.embedder import Embedder
+        embedder = Embedder()
+        
+        topic_texts = parser.get_all_topics_text(parsed)
+        embeddings = embedder.embed(topic_texts)
+        
+        # Prepare metadata
+        metadata_list = []
+        topic_idx = 0
+        for unit in parsed.units:
+            for topic in unit.topics:
+                metadata_list.append({
+                    "unit_number": unit.number,
+                    "unit_title": unit.title,
+                    "topic": topic.name
+                })
+                topic_idx += 1
+        
+        # Clear old and add new
+        store.clear()
+        store.add_embeddings(embeddings, metadata_list)
+        
+        return {
+            "status": "success",
+            "course_name": parsed.course_name,
+            "units_detected": len(parsed.units),
+            "topics_indexed": len(topic_texts),
+            "syllabus": parsed.to_dict()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Syllabus upload failed: {str(e)}")
+
+
+@app.get("/syllabus")
+async def get_syllabus():
+    """Get current stored syllabus structure."""
+    try:
+        store = _get_syllabus_store()
+        units = store.get_all_units()
+        
+        return {
+            "status": "success",
+            "topics_count": store.count,
+            "units": units
+        }
+    except Exception as e:
+        raise HTTPException(500, f"Failed to get syllabus: {str(e)}")
+
+
+@app.post("/syllabus/compare")
+async def compare_syllabus(lecture_texts: List[str] = []):
+    """
+    Compare lecture content against syllabus.
+    
+    Args:
+        lecture_texts: List of lecture content chunks to compare
+        
+    Returns:
+        Coverage percentage per unit
+    """
+    try:
+        if not lecture_texts:
+            raise HTTPException(400, "Provide lecture_texts to compare")
+        
+        store = _get_syllabus_store()
+        
+        if store.count == 0:
+            raise HTTPException(400, "No syllabus uploaded yet")
+        
+        # Generate embeddings for lecture content
+        from pdf_to_text.ingestion.embedder import Embedder
+        embedder = Embedder()
+        lecture_embeddings = embedder.embed(lecture_texts)
+        
+        # Compare using comparator
+        from syllabus.comparator import SyllabusComparator
+        comparator = SyllabusComparator(store)
+        result = comparator.compare(lecture_embeddings, lecture_texts)
+        
+        return {
+            "status": "success",
+            **result.to_dict()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(500, f"Comparison failed: {str(e)}")
 
 
 # ============ Main ============

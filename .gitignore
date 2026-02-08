@@ -18,3 +18,11 @@ unified_knowledge.json
 uploads/
 test.pdf
 *.faiss
+
+# Node
+node_modules/
+frontend/node_modules/
+
+# Syllabus
+syllabus_index/
+test.png

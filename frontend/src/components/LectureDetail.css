@@ -541,7 +541,312 @@ body[data-theme="light"] .skeleton-loader {
     }
 }
 
-/* Light theme adjustment for border */
 body[data-theme="light"] .detail-right {
     border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Resources Section */
+.resources-section {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.resources-section h5 {
+    font-family: 'Outfit', sans-serif;
+    color: white;
+    font-size: 0.95rem;
+    margin-bottom: 1rem;
+}
+
+.resources-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.resource-link {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.resource-link:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateX(4px);
+}
+
+.resource-link.video {
+    border-left: 3px solid #ef4444;
+}
+
+.resource-link.tutorial {
+    border-left: 3px solid #22c55e;
+}
+
+.resource-link.docs {
+    border-left: 3px solid #3b82f6;
+}
+
+.resource-link.paper {
+    border-left: 3px solid #a855f7;
+}
+
+.resource-icon {
+    font-size: 1.25rem;
+}
+
+.resource-title {
+    flex: 1;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.resource-arrow {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.9rem;
+    transition: transform 0.2s ease;
+}
+
+.resource-link:hover .resource-arrow {
+    transform: translateX(4px);
+    color: white;
+}
+
+/* Light Theme */
+body[data-theme="light"] .resources-section {
+    border-top-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .resources-section h5 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .resource-link {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.05);
+    color: #1e293b;
+}
+
+body[data-theme="light"] .resource-link:hover {
+    background: #f1f5f9;
+}
+
+/* Clickable Material Cards */
+button.material-card {
+    cursor: default;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    outline: none;
+}
+
+button.material-card.clickable {
+    cursor: pointer;
+    border-color: rgba(102, 126, 234, 0.3);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(168, 85, 247, 0.1) 100%);
+}
+
+button.material-card.clickable:hover {
+    border-color: rgba(102, 126, 234, 0.6);
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+}
+
+button.material-card.clickable .mat-value {
+    color: #a78bfa;
+    font-weight: 600;
+}
+
+button.material-card:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+/* Summary Modal */
+.summary-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.summary-modal {
+    background: rgba(30, 30, 45, 0.98);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 700px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.summary-modal .modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.summary-modal .modal-close:hover {
+    background: rgba(239, 68, 68, 0.3);
+}
+
+.summary-modal h3 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.4rem;
+    color: white;
+    margin-bottom: 1.5rem;
+    padding-right: 40px;
+}
+
+.summary-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.loading-spinner {
+    font-size: 2rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.summary-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.summary-section {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 1.25rem;
+}
+
+.summary-section h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
+    color: #a78bfa;
+    margin-bottom: 0.75rem;
+}
+
+.summary-section p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.summary-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.summary-section li {
+    padding: 0.5rem 0;
+    color: rgba(255, 255, 255, 0.75);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.9rem;
+}
+
+.summary-section li::before {
+    content: '•';
+    color: #667eea;
+    margin-right: 0.75rem;
+}
+
+.summary-section li:last-child {
+    border-bottom: none;
+}
+
+.topics-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.topic-tag {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(168, 85, 247, 0.2) 100%);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    padding: 0.4rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: white;
+}
+
+.no-summary {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    padding: 2rem;
+}
+
+/* Light Theme */
+body[data-theme="light"] .summary-modal {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .summary-modal h3 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .summary-section {
+    background: #f8fafc;
+}
+
+body[data-theme="light"] .summary-section p,
+body[data-theme="light"] .summary-section li {
+    color: #475569;
+}
+
+body[data-theme="light"] button.material-card.clickable {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%);
 }

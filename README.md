@@ -88,6 +88,27 @@ python -m api.server
 ```
 *The server will start at `http://localhost:8000` (and provide a public `ngrok` URL if configured).*
 
+### Run the Frontend 💻
+The project includes a React frontend for easy interaction.
+
+1.  **Navigate to frontend directory:**
+    ```bash
+    cd frontend
+    ```
+
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
+
+3.  **Start development server:**
+    ```bash
+    npm run dev
+    ```
+    *Access the UI at `http://localhost:5173`*
+
+    > **Note:** Ensure the backend server is running first!
+
 ### API Endpoints
 
 #### 🔍 Research & Summarization
