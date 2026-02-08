@@ -229,10 +229,25 @@ Analyze all content and extract actionable knowledge. Return ONLY valid JSON."""
         # Build further resources
         resources = []
         if web_data:
+            # Priority 1: Tutorials & Docs
             for item in web_data.get("tutorials", [])[:3]:
                 resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "tutorial"})
             for item in web_data.get("documentation", [])[:2]:
                 resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "docs"})
+            
+            # Priority 2: Blogs & Research (if we have few resources)
+            if len(resources) < 3:
+                for item in web_data.get("blogs", [])[:2]:
+                    resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "article"})
+                for item in web_data.get("research_papers", [])[:2]:
+                    resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "paper"})
+            
+            # Priority 3: General Web (if still few)
+            if len(resources) < 3:
+                 for item in web_data.get("wikipedia", [])[:1]:
+                    resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "wiki"})
+                 for item in web_data.get("other", [])[:2]:
+                    resources.append({"title": item.get("title", ""), "url": item.get("url", ""), "type": "web"})
         if youtube_data:
             for video in youtube_data.get("videos", [])[:3]:
                 resources.append({"title": video.get("title", ""), "url": video.get("url", ""), "type": "video"})

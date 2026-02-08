@@ -1,0 +1,86 @@
+/* Global Styles */
+:root {
+    /* Dark Theme (default) */
+    --bg-dark: #0f0f1a;
+    --bg-card: rgba(30, 30, 45, 0.6);
+    --bg-card-solid: #1e1e2d;
+    --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-muted: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(255, 255, 255, 0.1);
+    --input-bg: rgba(255, 255, 255, 0.05);
+    --input-border: rgba(102, 126, 234, 0.5);
+    --sidebar-bg: rgba(20, 20, 35, 0.95);
+    --header-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --success-gradient: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    --danger-gradient: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    --toggle-bg: rgba(30, 30, 45, 0.9);
+    --toggle-border: rgba(255, 255, 255, 0.15);
+    --toggle-text: white;
+    --body-bg: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 50%, #16213e 100%);
+    --chat-user-bg: rgba(102, 126, 234, 0.3);
+    --chat-ai-bg: rgba(40, 167, 69, 0.2);
+}
+
+/* Light Theme */
+body[data-theme="light"] {
+    --bg-dark: #f5f7fa;
+    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-card-solid: #ffffff;
+    --text-primary: #1a1a2e;
+    --text-secondary: rgba(26, 26, 46, 0.7);
+    --text-muted: rgba(26, 26, 46, 0.5);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --input-bg: rgba(0, 0, 0, 0.03);
+    --input-border: rgba(102, 126, 234, 0.3);
+    --sidebar-bg: rgba(255, 255, 255, 0.95);
+    --toggle-bg: rgba(255, 255, 255, 0.9);
+    --toggle-border: rgba(0, 0, 0, 0.1);
+    --toggle-text: #1a1a2e;
+    --body-bg: linear-gradient(135deg, #e8eef5 0%, #f5f7fa 50%, #e3e9f0 100%);
+    --chat-user-bg: rgba(102, 126, 234, 0.15);
+    --chat-ai-bg: rgba(40, 167, 69, 0.1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    height: 100%;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: var(--body-bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.5);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.7);
+}

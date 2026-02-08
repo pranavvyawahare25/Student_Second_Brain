@@ -1,0 +1,117 @@
+.research-result {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.research-summary h4 {
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+    font-size: 1.2rem;
+}
+
+.research-summary p {
+    color: #34495e;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.research-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+}
+
+.research-card {
+    background: #f8f9fa;
+    padding: 1.25rem;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.research-card h5 {
+    margin-bottom: 0.75rem;
+    color: #495057;
+    font-size: 1rem;
+    border-bottom: 2px solid #dee2e6;
+    padding-bottom: 0.5rem;
+}
+
+.research-card ul, .research-card ol {
+    margin: 0;
+    padding-left: 1.5rem;
+}
+
+.research-card li {
+    margin-bottom: 0.5rem;
+    color: #495057;
+    line-height: 1.4;
+}
+
+.research-steps .steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.step-number {
+    background: #3498db;
+    color: white;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.research-resources .resources-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.resource-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #495057;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.resource-link:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-color: #3498db;
+    color: #3498db;
+}
+
+.resource-link.video .resource-icon { color: #e74c3c; }
+.resource-link.tutorial .resource-icon { color: #2ecc71; }
+.resource-link.docs .resource-icon { color: #f1c40f; }
+
+@media (max-width: 768px) {
+    .research-grid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,547 @@
+.lecture-detail {
+    background: rgba(30, 30, 45, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.lecture-detail h4 {
+    font-family: 'Outfit', sans-serif;
+    color: white;
+    font-size: 1.2rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 1rem;
+}
+
+.empty-icon {
+    font-size: 3rem;
+}
+
+.empty-state p {
+    color: rgba(255, 255, 255, 0.5);
+    text-align: center;
+}
+
+.materials-section h5,
+.upload-section h5 {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+}
+
+.materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+}
+
+.material-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+}
+
+.mat-icon {
+    font-size: 1.5rem;
+}
+
+.mat-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.75rem;
+}
+
+.mat-value {
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.unified-dropzone {
+    position: relative;
+    border: 2px dashed rgba(102, 126, 234, 0.3);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+}
+
+.unified-dropzone:hover {
+    border-color: var(--input-border);
+    background: rgba(102, 126, 234, 0.05);
+}
+
+.unified-dropzone input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.dropzone-icon {
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+}
+
+.unified-dropzone label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+.unified-dropzone label strong {
+    color: white;
+    font-size: 1.1rem;
+}
+
+.supported-formats {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.pending-files {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.pending-files h6 {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
+}
+
+.pending-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pending-file-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+}
+
+.file-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.remove-file {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 0.5rem;
+}
+
+.remove-file:hover {
+    color: #ff4d4d;
+}
+
+.save-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.save-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    align-self: flex-start;
+}
+
+.save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* Light Theme Styles */
+body[data-theme="light"] .lecture-detail {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .lecture-detail h4 {
+    color: #1a1a2e;
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .empty-state p {
+    color: rgba(26, 26, 46, 0.5);
+}
+
+body[data-theme="light"] .materials-section h5,
+body[data-theme="light"] .upload-section h5 {
+    color: rgba(26, 26, 46, 0.9);
+}
+
+body[data-theme="light"] .material-card {
+    background: rgba(0, 0, 0, 0.03);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .mat-label {
+    color: rgba(26, 26, 46, 0.6);
+}
+
+body[data-theme="light"] .mat-value {
+    color: #1a1a2e;
+}
+
+body[data-theme="light"] .upload-item label {
+    color: rgba(26, 26, 46, 0.7);
+}
+
+body[data-theme="light"] .upload-item input[type="file"] {
+    background: rgba(0, 0, 0, 0.03);
+    color: rgba(26, 26, 46, 0.7);
+}
+
+body[data-theme="light"] .upload-item input[type="file"]:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.upload-status-msg {
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    color: #a5b4fc;
+    font-size: 0.9rem;
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+}
+
+body[data-theme="light"] .upload-status-msg {
+    background: rgba(102, 126, 234, 0.1);
+    color: #4c51bf;
+    border-color: rgba(102, 126, 234, 0.2);
+}
+
+.detail-body {
+    display: flex;
+    gap: 2rem;
+    flex: 1;
+}
+
+.detail-left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.detail-right {
+    flex: 1;
+    min-width: 250px;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1.5rem;
+}
+
+.suggestions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.25rem;
+}
+
+.suggestions-header h5 {
+    font-family: 'Outfit', sans-serif;
+    color: white;
+    font-size: 1rem;
+    margin: 0;
+    background: linear-gradient(90deg, #fff, rgba(255, 255, 255, 0.7));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.refresh-sugg-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.refresh-sugg-btn:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    transform: rotate(180deg);
+}
+
+.refresh-sugg-btn.loading {
+    animation: spin 1s linear infinite;
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.suggestions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.suggestion-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    gap: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.suggestion-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    background: linear-gradient(to bottom, #6366f1, #a855f7);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.suggestion-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+.suggestion-card:hover::before {
+    opacity: 1;
+}
+
+.sugg-icon-wrapper {
+    width: 36px;
+    height: 36px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.sugg-icon {
+    font-size: 1.25rem;
+}
+
+.sugg-content h6 {
+    color: white;
+    font-size: 0.9rem;
+    margin: 0 0 0.4rem 0;
+    font-weight: 600;
+}
+
+.sugg-content p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.suggestions-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.skeleton-loader {
+    height: 80px;
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 0.03) 25%,
+            rgba(255, 255, 255, 0.06) 50%,
+            rgba(255, 255, 255, 0.03) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 12px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.no-suggestions {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.no-suggestions p {
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.animate-in {
+    opacity: 0;
+    transform: translateY(10px);
+    animation: slideIn 0.4s ease forwards;
+}
+
+@keyframes slideIn {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Light Theme Enhancements */
+body[data-theme="light"] .suggestion-card {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+body[data-theme="light"] .suggestion-card:hover {
+    background: #f8fafc;
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .sugg-content h6 {
+    color: #1e293b;
+}
+
+body[data-theme="light"] .sugg-content p {
+    color: #475569;
+}
+
+body[data-theme="light"] .refresh-sugg-btn {
+    background: rgba(0, 0, 0, 0.02);
+    color: #64748b;
+}
+
+body[data-theme="light"] .skeleton-loader {
+    background: linear-gradient(90deg,
+            rgba(0, 0, 0, 0.03) 25%,
+            rgba(0, 0, 0, 0.06) 50%,
+            rgba(0, 0, 0, 0.03) 75%);
+}
+
+
+/* Responsive adjustment */
+@media (max-width: 1100px) {
+    .detail-body {
+        flex-direction: column;
+    }
+
+    .detail-right {
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-left: 0;
+        padding-top: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .materials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lecture-detail h4 {
+        font-size: 1.25rem;
+    }
+
+    .unified-dropzone {
+        padding: 1.5rem;
+    }
+
+    .dropzone-icon {
+        font-size: 2rem;
+    }
+
+    .material-card {
+        padding: 0.75rem;
+    }
+}
+
+/* Light theme adjustment for border */
+body[data-theme="light"] .detail-right {
+    border-color: rgba(0, 0, 0, 0.1);
+}

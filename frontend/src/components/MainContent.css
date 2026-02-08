@@ -1,0 +1,286 @@
+.main-content {
+    flex: 1;
+    padding: 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.welcome-card {
+    background: rgba(30, 30, 45, 0.6);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 3rem;
+    text-align: center;
+    max-width: 600px;
+    margin: auto;
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.welcome-card h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.8rem;
+    color: white;
+    margin-bottom: 0.75rem;
+}
+
+.welcome-card p {
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.feature-badges {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.badge {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.85rem;
+}
+
+.content-header {
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.content-header h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 0.25rem;
+}
+
+.content-header p {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.95rem;
+}
+
+.content-detail {
+    flex: 1;
+    min-height: 300px;
+    animation: fadeIn 0.4s ease;
+}
+
+@media (max-width: 900px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Light Theme Styles */
+body[data-theme="light"] .welcome-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .welcome-card h2 {
+    color: #1a1a2e;
+}
+
+body[data-theme="light"] .welcome-card p {
+    color: rgba(26, 26, 46, 0.7);
+}
+
+body[data-theme="light"] .badge {
+    color: rgba(26, 26, 46, 0.9);
+}
+
+body[data-theme="light"] .content-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+body[data-theme="light"] .content-header h2 {
+    color: #1a1a2e;
+}
+
+body[data-theme="light"] .content-header p {
+    color: rgba(26, 26, 46, 0.6);
+}
+
+/* Landing Page Styles */
+.main-content.landing-page {
+    padding: 0;
+    gap: 0;
+}
+
+.hero-section {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: radial-gradient(circle at top right, rgba(102, 126, 234, 0.15), transparent),
+        radial-gradient(circle at bottom left, rgba(118, 75, 162, 0.1), transparent);
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-content {
+    max-width: 900px;
+    z-index: 1;
+}
+
+.hero-tag {
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+    padding: 0.5rem 1.25rem;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2rem;
+    display: inline-block;
+}
+
+.hero-content h1 {
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #fff, #a5b4fc);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.6);
+    line-height: 1.6;
+    max-width: 700px;
+    margin: 0 auto 3rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.landing-feature-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2.5rem;
+    border-radius: 24px;
+    text-align: left;
+    transition: all 0.3s ease;
+}
+
+.landing-feature-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(102, 126, 234, 0.3);
+    transform: translateY(-5px);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.landing-feature-card h3 {
+    font-family: 'Outfit', sans-serif;
+    color: white;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.landing-feature-card p {
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.landing-footer {
+    padding: 4rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 0.9rem;
+}
+
+.cta-btn.primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    padding: 1.25rem 3rem;
+    font-size: 1.1rem;
+}
+
+.cta-btn.primary:hover {
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+    transform: translateY(-4px) scale(1.02);
+}
+
+body[data-theme="light"] .hero-content h1 {
+    background: linear-gradient(to right, #1a1a2e, #667eea);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+body[data-theme="light"] .hero-content p {
+    color: rgba(26, 26, 46, 0.7);
+}
+
+body[data-theme="light"] .landing-feature-card {
+    background: white;
+    border-color: rgba(0, 0, 0, 0.05);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+}
+
+body[data-theme="light"] .landing-feature-card h3 {
+    color: #1a1a2e;
+}
+
+body[data-theme="light"] .landing-feature-card p {
+    color: rgba(26, 26, 46, 0.6);
+}
+
+@media (max-width: 600px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-content p {
+        font-size: 1.1rem;
+    }
+
+    .cta-btn.primary {
+        width: 100%;
+        padding: 1rem 2rem;
+    }
+}

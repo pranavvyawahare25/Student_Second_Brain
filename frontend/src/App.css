@@ -1,0 +1,22 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+.main-layout.full-width {
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .main-layout {
+        flex-direction: column;
+        overflow-y: auto;
+    }
+}
